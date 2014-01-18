@@ -7,3 +7,14 @@ C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Deb
 C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.csproj.GenerateResource.Cache
 C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.exe
 C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.pdb
+C:\Users\Max\Documents\GitHub\VKPlayer\WebBrowser\bin\Debug\VKPlayer.exe.config
+C:\Users\Max\Documents\GitHub\VKPlayer\WebBrowser\obj\Debug\VKPlayer.exe
+C:\Users\Max\Documents\GitHub\VKPlayer\WebBrowser\obj\Debug\VKPlayer.pdb
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\bin\Debug\VKPlayer.exe.config
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\bin\Debug\VKPlayer.exe
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\bin\Debug\VKPlayer.pdb
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.MainWindow.resources
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.Properties.Resources.resources
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.csproj.GenerateResource.Cache
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.exe
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.pdb
