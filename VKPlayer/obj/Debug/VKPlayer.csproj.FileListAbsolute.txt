@@ -1,0 +1,9 @@
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\bin\Debug\VKPlayer.exe.config
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\bin\Debug\VKPlayer.exe
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\bin\Debug\VKPlayer.pdb
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.csprojResolveAssemblyReference.cache
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.Form1.resources
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.Properties.Resources.resources
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.csproj.GenerateResource.Cache
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.exe
+C:\Users\Max\Documents\Visual Studio 2012\Projects\WebBrowser\WebBrowser\obj\Debug\VKPlayer.pdb
