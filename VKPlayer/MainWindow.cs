@@ -59,7 +59,7 @@ namespace VKPlayer
                 audios.Add("http:\\\\" + mat.ToString());
             }
 
-            /*
+            /* TODO: Add russian language
             Regex titles = new Regex(@"(this\,\sevent\)\;" + "\"" + @"\>[0-9|\s|a-z|&|-|\.|\)|\(|:|;|#]+)|" + txtUrl.Text, RegexOptions.IgnoreCase);
 
             //webBrowser.DocumentText = Encoding.GetEncoding(1251).GetString(Encoding.GetEncoding(1251).GetBytes(webBrowser.DocumentText));
