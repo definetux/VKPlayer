@@ -16,6 +16,8 @@ namespace VKPlayer
 
         private string password;
 
+        private DialogResult result;
+
 
         public Authorization()
         {
@@ -26,7 +28,14 @@ namespace VKPlayer
         {
             login = txtLogin.Text;
             password = txtPassword.Text;
+            result = DialogResult.OK;
             this.Close();
+        }
+
+        public  DialogResult ShowDialog()
+        {
+            base.ShowDialog();
+            return result;
         }
 
         public string Login
@@ -43,6 +52,12 @@ namespace VKPlayer
             {
                 return password;
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            result = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

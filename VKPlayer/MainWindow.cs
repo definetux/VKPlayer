@@ -39,9 +39,14 @@ namespace VKPlayer
 
             Authorization auth = new Authorization();
 
-            auth.Show();
+            DialogResult res = auth.ShowDialog();
 
-            webBrowser.Url = new Uri("https://login.vk.com/?act=login&email=&pass=&expire=&vk=");
+            if (res == DialogResult.Cancel)
+            {
+                Environment.Exit(-1);
+            }
+
+            webBrowser.Url = new Uri("https://login.vk.com/?act=login&email=" + auth.Login + "&pass=" + auth.Password + "&expire=&vk=");
 
             webBrowser.Navigated += webBrowser_Navigated;
 
