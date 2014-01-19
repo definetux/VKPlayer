@@ -30,11 +30,11 @@
         {
             this.txtUrl = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.txtAudio = new System.Windows.Forms.TextBox();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
+            this.lstPlayList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // txtUrl
@@ -55,19 +55,11 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // txtAudio
-            // 
-            this.txtAudio.Location = new System.Drawing.Point(12, 48);
-            this.txtAudio.Multiline = true;
-            this.txtAudio.Name = "txtAudio";
-            this.txtAudio.Size = new System.Drawing.Size(260, 106);
-            this.txtAudio.TabIndex = 7;
-            // 
             // btnPlay
             // 
-            this.btnPlay.Location = new System.Drawing.Point(297, 48);
+            this.btnPlay.Location = new System.Drawing.Point(297, 46);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(75, 23);
+            this.btnPlay.Size = new System.Drawing.Size(75, 50);
             this.btnPlay.TabIndex = 9;
             this.btnPlay.Text = "Play";
             this.btnPlay.UseVisualStyleBackColor = true;
@@ -75,9 +67,9 @@
             // 
             // btnNext
             // 
-            this.btnNext.Location = new System.Drawing.Point(297, 102);
+            this.btnNext.Location = new System.Drawing.Point(378, 46);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(75, 23);
+            this.btnNext.Size = new System.Drawing.Size(75, 50);
             this.btnNext.TabIndex = 10;
             this.btnNext.Text = "Next";
             this.btnNext.UseVisualStyleBackColor = true;
@@ -85,9 +77,9 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(297, 131);
+            this.btnStop.Location = new System.Drawing.Point(297, 102);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(75, 23);
+            this.btnStop.Size = new System.Drawing.Size(75, 50);
             this.btnStop.TabIndex = 11;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -95,24 +87,33 @@
             // 
             // btnPause
             // 
-            this.btnPause.Location = new System.Drawing.Point(297, 73);
+            this.btnPause.Location = new System.Drawing.Point(378, 102);
             this.btnPause.Name = "btnPause";
-            this.btnPause.Size = new System.Drawing.Size(75, 23);
+            this.btnPause.Size = new System.Drawing.Size(75, 50);
             this.btnPause.TabIndex = 12;
             this.btnPause.Text = "Pause";
             this.btnPause.UseVisualStyleBackColor = true;
             this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
+            // lstPlayList
+            // 
+            this.lstPlayList.FormattingEnabled = true;
+            this.lstPlayList.Location = new System.Drawing.Point(12, 46);
+            this.lstPlayList.Name = "lstPlayList";
+            this.lstPlayList.Size = new System.Drawing.Size(260, 108);
+            this.lstPlayList.TabIndex = 13;
+            this.lstPlayList.DoubleClick += new System.EventHandler(this.lstPlayList_DoubleClick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 166);
+            this.ClientSize = new System.Drawing.Size(467, 170);
+            this.Controls.Add(this.lstPlayList);
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.btnPlay);
-            this.Controls.Add(this.txtAudio);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtUrl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -127,11 +128,11 @@
 
         private System.Windows.Forms.TextBox txtUrl;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.TextBox txtAudio;
         private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnPause;
+        private System.Windows.Forms.ListBox lstPlayList;
     }
 }
 
