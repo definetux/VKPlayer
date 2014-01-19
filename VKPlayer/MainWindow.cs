@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Net;
+using System.Threading;
 
 namespace VKPlayer
 {
@@ -36,7 +38,7 @@ namespace VKPlayer
             isAuthorization = 0;
             webBrowser = new System.Windows.Forms.WebBrowser();
             webBrowser.ScriptErrorsSuppressed = true;
-            
+
             webBrowser.Navigated += webBrowser_Navigated;
 
             Authorization();
@@ -83,8 +85,7 @@ namespace VKPlayer
                 StreamReader sr = new StreamReader(stream, enc);
                 HTMLText = sr.ReadToEnd();
                 stream.Close();
-
-                //Regex reg = new Regex(@"(cs[0-9]+-[0-9|a-z]+\.vk\.me/[0-9|a-z]+/[0-9|a-z]+\.mp3)|" + 
+ 
                 Regex reg = new Regex(@"(cs.+\.mp3)|" + 
                                          @"(\<span\sclass=" + "\"" + "title" + "\"" + ".+" + @"\<span\sclass=" + "\"" + "user" + "\")",
                                           RegexOptions.IgnoreCase);
@@ -100,10 +101,13 @@ namespace VKPlayer
                     {
                         i++;
                         string[] text = mat.ToString().Split(new Char[] {'<','>'});
-                        lstPlayList.Items.Add(i.ToString() + ". " + text[4] + Environment.NewLine);
+                        if (mat.ToString().Contains("a href"))
+                            lstPlayList.Items.Add(i.ToString() + ". " + text[4].Replace("&", "").Replace("#","").Replace("$","") + Environment.NewLine);
+                        else
+                            lstPlayList.Items.Add(i.ToString() + ". " + text[2].Replace("&", "").Replace("#", "").Replace("$", "") + Environment.NewLine);
                     }
                     
-                }
+                }               
             }
             else
                 isAuthorization++;
@@ -117,7 +121,7 @@ namespace VKPlayer
         private void btnPlay_Click(object sender, EventArgs e)
         {
             if (isOpen == false && audios.Count > 0)
-            {
+            {               
                 if (MP3Player.OpenPlayer(audios[nextAudio]) == false)
                     return;
                 if (MP3Player.Play(this.Handle) == false)
@@ -211,6 +215,28 @@ namespace VKPlayer
         private void lstPlayList_DoubleClick(object sender, EventArgs e)
         {
             PlayNext(lstPlayList.SelectedIndex);
-        }    
+        }
+
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            int index = lstPlayList.SelectedIndex;
+            if (index == -1)
+            {
+                MessageBox.Show("Choose a track");
+                return;
+            }
+
+            string path = audios[index].Remove(0, 7).Replace("/", "");
+            SaveFileDialog sf = new SaveFileDialog();
+            sf.RestoreDirectory = true;
+            sf.Filter = "Music files (*.mp3)|*.mp3";
+            sf.FileName = path;
+            if (sf.ShowDialog() == DialogResult.Cancel)
+                return;
+    
+            DownloadManager dm = new DownloadManager();
+            dm.Show();          
+            dm.Download(audios[index], sf.FileName);
+        }
     }
 }

@@ -7,3 +7,4 @@ C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.csproj.Gene
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.exe
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.pdb
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.Authorization.resources
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.DownloadManager.resources

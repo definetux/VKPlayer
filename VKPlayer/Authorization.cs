@@ -21,7 +21,6 @@ namespace VKPlayer
 
         public Authorization()
         {
-            this.StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
         }
 
@@ -59,6 +58,11 @@ namespace VKPlayer
         {
             result = DialogResult.Cancel;
             this.Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {          
+            base.OnClosed(e);
         }
     }
 }
