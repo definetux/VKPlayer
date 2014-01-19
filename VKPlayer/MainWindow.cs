@@ -166,7 +166,11 @@ namespace VKPlayer
         private void btnNext_Click(object sender, EventArgs e)
         {
             if (isOpen == false)
-                PlayNext(0);
+            {
+                if (musicState == MusicState.Stoped)
+                    nextAudio++;
+                PlayNext(nextAudio);
+            }
             else
                 PlayNext();
         }
