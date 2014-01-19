@@ -43,6 +43,7 @@ namespace VKPlayer
             // Let the user know we are connecting to the server
             this.url = url;
             this.path = path;
+            txtFile.Text = path;
             // Create a new thread that calls the Download() method
             thrDownload = new Thread(Download);
             // Start the thread, and thus call Download()
@@ -57,6 +58,11 @@ namespace VKPlayer
             pbLoading.Value = PercentProgress;
          // Display the current progress on the form
             lblProgress.Text = "Downloaded " + BytesRead + " out of " + TotalBytes + " (" + PercentProgress + "%)";
+            if (BytesRead == TotalBytes)
+            {
+                lblProgress.Text = "Download successfull";
+                btnOk.Enabled = true;
+            }
          }
 
         private void Download()
@@ -92,7 +98,6 @@ namespace VKPlayer
                         // Invoke the method that updates the form's label and progress bar
                         this.Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] { strLocal.Length, fileSize });
                     }
-                    MessageBox.Show("Download successfull");
                 }
                 catch
                 {
@@ -105,6 +110,11 @@ namespace VKPlayer
                     strLocal.Close();
                 }
             }
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
