@@ -108,7 +108,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 161);
+            this.ClientSize = new System.Drawing.Size(460, 175);
             this.Controls.Add(this.lstPlayList);
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnStop);
@@ -118,6 +118,7 @@
             this.Controls.Add(this.txtUrl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VK Player";
             this.ResumeLayout(false);
             this.PerformLayout();

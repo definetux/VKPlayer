@@ -6,5 +6,4 @@ C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.Properties.
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.csproj.GenerateResource.Cache
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.exe
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.pdb
-C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.csprojResolveAssemblyReference.cache
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.Authorization.resources

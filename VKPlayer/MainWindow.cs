@@ -36,7 +36,20 @@ namespace VKPlayer
             isAuthorization = 0;
             webBrowser = new System.Windows.Forms.WebBrowser();
             webBrowser.ScriptErrorsSuppressed = true;
+            
+            webBrowser.Navigated += webBrowser_Navigated;
 
+            Authorization();
+
+            isOpen = false;
+
+            musicState = MusicState.Stoped;
+
+            InitializeComponent();
+        }
+
+        public void Authorization()
+        {
             Authorization auth = new Authorization();
 
             DialogResult res = auth.ShowDialog();
@@ -46,19 +59,17 @@ namespace VKPlayer
                 Environment.Exit(-1);
             }
 
-            webBrowser.Url = new Uri("https://login.vk.com/?act=login&email=" + auth.Login + "&pass=" + auth.Password + "&expire=&vk=");
-
-            webBrowser.Navigated += webBrowser_Navigated;
-
-            isOpen = false;
-
-            musicState = MusicState.Stoped;
-
-            InitializeComponent();
+            webBrowser.Navigate("https://login.vk.com/?act=login&email=" + auth.Login + "&pass=" + auth.Password + "&expire=&vk=");
         }
 
         void webBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
+            if (webBrowser.Url.AbsoluteUri.Contains("login.php"))
+            {
+                MessageBox.Show("Invalid username or password","Error!",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                Authorization();
+            }
+
             if (isAuthorization == 2)
             {
                 audios.Clear();
@@ -73,7 +84,8 @@ namespace VKPlayer
                 HTMLText = sr.ReadToEnd();
                 stream.Close();
 
-                Regex reg = new Regex(@"(cs[0-9]+-[0-9|a-z]+\.vk\.me/[0-9|a-z]+/[0-9|a-z]+\.mp3)|" + 
+                //Regex reg = new Regex(@"(cs[0-9]+-[0-9|a-z]+\.vk\.me/[0-9|a-z]+/[0-9|a-z]+\.mp3)|" + 
+                Regex reg = new Regex(@"(cs.+\.mp3)|" + 
                                          @"(\<span\sclass=" + "\"" + "title" + "\"" + ".+" + @"\<span\sclass=" + "\"" + "user" + "\")",
                                           RegexOptions.IgnoreCase);
  
@@ -112,6 +124,7 @@ namespace VKPlayer
                     return;
                 isOpen = true;
                 musicState = MusicState.Played;
+                lstPlayList.SelectedIndex = nextAudio;
             }
             else
                 if (musicState == MusicState.Paused)
@@ -177,6 +190,8 @@ namespace VKPlayer
             }
             if (MP3Player.Play(this.Handle) == false)
                 return;
+
+            lstPlayList.SelectedIndex = nextAudio;
 
             isOpen = true;            
         }

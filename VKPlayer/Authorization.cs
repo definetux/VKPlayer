@@ -21,6 +21,7 @@ namespace VKPlayer
 
         public Authorization()
         {
+            this.StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
         }
 
