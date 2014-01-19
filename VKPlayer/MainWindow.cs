@@ -52,7 +52,8 @@ namespace VKPlayer
             if (isAuthorization == 2)
             {
                 audios.Clear();
-                txtAudio.Text = "";
+                nextAudio = 0;
+                lstPlayList.Items.Clear();
 
                 Encoding enc = Encoding.GetEncoding("windows-1251");
                 string HTMLText;
@@ -65,45 +66,22 @@ namespace VKPlayer
                 Regex reg = new Regex(@"(cs1-[0-9|a-z]+\.vk\.me/[0-9|a-z]+/[0-9|a-z]+\.mp3)|" + 
                                          @"(\<span\sclass=" + "\"" + "title" + "\"" + ".+" + @"\<span\sclass=" + "\"" + "user" + "\")",
                                           RegexOptions.IgnoreCase);
-
-                //Regex reg = new Regex(@"\<span\sclass=" + "\"" + "title" + "\"" + ".+" + @"\<span\sclass=" + "\"" + "user" + "\"", RegexOptions.IgnoreCase);
-
+ 
                 MatchCollection mc = reg.Matches(HTMLText);
 
                 int i = 0;
                 foreach (Match mat in mc)
                 {
-
                     if (mat.ToString().Contains("vk.me"))
                         audios.Add("http:\\\\" + mat.ToString());
                     else
                     {
                         i++;
                         string[] text = mat.ToString().Split(new Char[] {'<','>'});
-                        txtAudio.Text += i.ToString() + ". " + text[4] + Environment.NewLine;
+                        lstPlayList.Items.Add(i.ToString() + ". " + text[4] + Environment.NewLine);
                     }
                     
                 }
-
-                
-                /*
-                ///* TODO: Add russian language later  return cancelEvent(event);">
-                Regex titles = new Regex(@"(this\,\sevent\)\;" + "\"" + @"\>[0-9|\s|a-z|а-я|&|-|\.|\)|\(|:|;|#]+)|" + txtUrl.Text, RegexOptions.IgnoreCase);
-
-                //Regex titles = new Regex(@"return\scancelEvent\(event\)\;" + "\"" + @"\>[0-9|\s|a-z|а-я|&|-|\.|\)|\(|:|;|#|\\]+", RegexOptions.IgnoreCase);
-
-                //Regex titles = new Regex(@"\<tr\>.+\<div\>", RegexOptions.IgnoreCase);
-
-                MatchCollection match = titles.Matches(HTMLText);
-                string song;
-                foreach (Match mat in match)
-                {
-                    if (mat.ToString().ToLower() != txtUrl.Text)
-                        song = mat.ToString();//.Remove(0, 28);
-                    else
-                        song = mat.ToString();
-                    txtAudio.Text += song + Environment.NewLine;
-                }*/
             }
             else
                 isAuthorization++;
@@ -164,19 +142,24 @@ namespace VKPlayer
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            if (isOpen == true)
-            {
-                
+            if (isOpen == false)
+                PlayNext(0);
+            else
                 PlayNext();
-            }
         }
 
-        private void PlayNext()
+        private void PlayNext(int index = -1)
         {
             musicState = MusicState.Played;
-            if (MP3Player.ClosePlayer() == false)
-                return;
-            nextAudio++;
+            if (isOpen == true)
+                if (MP3Player.ClosePlayer() == false)
+                    return;
+            if (index != -1)
+                nextAudio = index;
+            else
+            {
+                nextAudio = (nextAudio >= audios.Count - 1) ? 0 : ++nextAudio;
+            }
             if (MP3Player.OpenPlayer(audios[nextAudio]) == false)
             {
                 nextAudio--;
@@ -194,6 +177,11 @@ namespace VKPlayer
             {
                 webBrowser.Navigate("http://vk.com/search?c%5Bq%5D=" + txtUrl.Text + "&c%5Bsection%5D=audio");
             }
+        }
+
+        private void lstPlayList_DoubleClick(object sender, EventArgs e)
+        {
+            PlayNext(lstPlayList.SelectedIndex);
         }    
     }
 }
