@@ -73,7 +73,7 @@ namespace VKPlayer
                 HTMLText = sr.ReadToEnd();
                 stream.Close();
 
-                Regex reg = new Regex(@"(cs1-[0-9|a-z]+\.vk\.me/[0-9|a-z]+/[0-9|a-z]+\.mp3)|" + 
+                Regex reg = new Regex(@"(cs[0-9]+-[0-9|a-z]+\.vk\.me/[0-9|a-z]+/[0-9|a-z]+\.mp3)|" + 
                                          @"(\<span\sclass=" + "\"" + "title" + "\"" + ".+" + @"\<span\sclass=" + "\"" + "user" + "\")",
                                           RegexOptions.IgnoreCase);
  
@@ -104,7 +104,7 @@ namespace VKPlayer
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (isOpen == false)
+            if (isOpen == false && audios.Count > 0)
             {
                 if (MP3Player.OpenPlayer(audios[nextAudio]) == false)
                     return;
