@@ -18,3 +18,4 @@ C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.Properties.Re
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.csproj.GenerateResource.Cache
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.exe
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.pdb
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.csprojResolveAssemblyReference.cache

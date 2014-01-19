@@ -103,11 +103,11 @@
             this.btnPause.UseVisualStyleBackColor = true;
             this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
-            // Form1
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 183);
+            this.ClientSize = new System.Drawing.Size(383, 166);
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnNext);
@@ -115,7 +115,8 @@
             this.Controls.Add(this.txtAudio);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtUrl);
-            this.Name = "Form1";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "MainWindow";
             this.Text = "VK Player";
             this.ResumeLayout(false);
             this.PerformLayout();
