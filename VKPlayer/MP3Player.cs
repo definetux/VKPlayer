@@ -13,41 +13,97 @@ namespace VKPlayer
 
         [DllImport("winmm.dll")]
         private static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hWndCallback);
+        [DllImport("winmm.dll")]
+        private static extern Int32 mciGetErrorString(Int32 errorCode, StringBuilder errorText, Int32 errorTextSize);
 
-        public static void OpenPlayer(string sFileName)
+        public static bool OpenPlayer(string sFileName)
         {
             string _command = "open \"" + sFileName + "\" type mpegvideo alias MediaFile";
-            mciSendString(_command, null, 0, IntPtr.Zero);
+            Int32 err;
+            StringBuilder buffer = new StringBuilder(128);
+            if ((err = (Int32)mciSendString(_command, null, 0, IntPtr.Zero)) != 0)
+            {
+                mciGetErrorString(err, buffer, 128);
+                System.Windows.Forms.MessageBox.Show(buffer.ToString());
+                return false;
+            }
+            else
+                return true;
         }
 
-        public static void Play(IntPtr handle)
+        public static bool Play(IntPtr handle)
         {
             string _command = "play MediaFile notify";
-            mciSendString(_command, null, 0, handle);
+            Int32 err;
+            StringBuilder buffer = new StringBuilder(128);
+            if ((err = (Int32)mciSendString(_command, null, 0, handle)) != 0)
+            {
+                mciGetErrorString(err, buffer, 128);
+                System.Windows.Forms.MessageBox.Show(buffer.ToString());
+                return false;
+            }
+            else
+                return true;
         }
 
-        public static void Resume()
+        public static bool Resume()
         {
             string _command = "resume MediaFile";
-            mciSendString(_command, null, 0, IntPtr.Zero);
+            Int32 err;
+            StringBuilder buffer = new StringBuilder(128);
+            if ((err = (Int32)mciSendString(_command, null, 0, IntPtr.Zero)) != 0)
+            {
+                mciGetErrorString(err, buffer, 128);
+                System.Windows.Forms.MessageBox.Show(buffer.ToString());
+                return false;
+            }
+            else
+                return true;
         }
 
-        public static void PausePlayer()
+        public static bool PausePlayer()
         {
             string _command = "pause MediaFile";
-            mciSendString(_command, null, 0, IntPtr.Zero);
+            Int32 err;
+            StringBuilder buffer = new StringBuilder(128);
+            if ((err = (Int32)mciSendString(_command, null, 0, IntPtr.Zero)) != 0)
+            {
+                mciGetErrorString(err, buffer, 128);
+                System.Windows.Forms.MessageBox.Show(buffer.ToString());
+                return false;
+            }
+            else
+                return true;
         }
 
-        public static void ClosePlayer()
+        public static bool ClosePlayer()
         {
             string _command = "close MediaFile";
-            mciSendString(_command, null, 0, IntPtr.Zero);
+            Int32 err;
+            StringBuilder buffer = new StringBuilder(128);
+            if ((err = (Int32)mciSendString(_command, null, 0, IntPtr.Zero)) != 0)
+            {
+                //mciGetErrorString(err, buffer, 128);
+                //System.Windows.Forms.MessageBox.Show(buffer.ToString());
+                return false;
+            }
+            else
+                return true;
         }
 
-        public static void StopPlayer()
+        public static bool StopPlayer()
         {
             string _command = "stop MediaFile";
-            mciSendString(_command, null, 0, IntPtr.Zero);
+            Int32 err;
+            StringBuilder buffer = new StringBuilder(128);
+            if ((err = (Int32)mciSendString(_command, null, 0, IntPtr.Zero)) != 0)
+            {
+                mciGetErrorString(err, buffer, 128);
+                System.Windows.Forms.MessageBox.Show(buffer.ToString());
+                return false;
+            }
+            else
+                return true;
         }
     }
 }
