@@ -36,7 +36,12 @@ namespace VKPlayer
             isAuthorization = 0;
             webBrowser = new System.Windows.Forms.WebBrowser();
             webBrowser.ScriptErrorsSuppressed = true;
-            webBrowser.Url = new Uri("http://login.vk.com/?act=login&email=+380950331759&pass=rammstein1989&expire=&vk=");
+
+            Authorization auth = new Authorization();
+
+            auth.Show();
+
+            webBrowser.Url = new Uri("https://login.vk.com/?act=login&email=&pass=&expire=&vk=");
 
             webBrowser.Navigated += webBrowser_Navigated;
 

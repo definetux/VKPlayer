@@ -1,0 +1,10 @@
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\bin\Release\VKPlayer.exe.config
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\bin\Release\VKPlayer.exe
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\bin\Release\VKPlayer.pdb
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.MainWindow.resources
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.Properties.Resources.resources
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.csproj.GenerateResource.Cache
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.exe
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.pdb
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.csprojResolveAssemblyReference.cache
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Release\VKPlayer.Authorization.resources
