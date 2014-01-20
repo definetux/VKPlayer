@@ -22,6 +22,7 @@ namespace VKPlayer
         }
 
         private int nextAudio = 0;
+
         private List<string> audios;
 
         private bool isOpen;
@@ -31,6 +32,10 @@ namespace VKPlayer
         private System.Windows.Forms.WebBrowser webBrowser;
 
         private MusicState musicState;
+
+        private Point downPoint;
+
+        private bool isDragMode = false;
 
         public MainWindow()
         {
@@ -87,9 +92,10 @@ namespace VKPlayer
                 stream.Close();
  
                 Regex reg = new Regex(@"(cs.+\.mp3)|" + 
-                                         @"(\<span\sclass=" + "\"" + "title" + "\"" + ".+" + @"\<span\sclass=" + "\"" + "user" + "\")",
-                                          RegexOptions.IgnoreCase);
- 
+                                         //@"(\<span\sclass=" + "\"" + "title" + "\"" + ".+" + @"\<span\sclass=" + "\"" + "user" + "\")",
+                                        @"(\<div\sclass=" + "\"" + @"title_wrap\sfl_l" + "\"" + ".+" +@"\<\/div\>)",
+                                        RegexOptions.IgnoreCase);
+                //<div class="title_wrap fl_l"
                 MatchCollection mc = reg.Matches(HTMLText);
 
                 int i = 0;
@@ -101,10 +107,62 @@ namespace VKPlayer
                     {
                         i++;
                         string[] text = mat.ToString().Split(new Char[] {'<','>'});
-                        if (mat.ToString().Contains("a href"))
-                            lstPlayList.Items.Add(i.ToString() + ". " + text[4].Replace("&", "").Replace("#","").Replace("$","") + Environment.NewLine);
+                        /*
+                        if (text[13].Contains("a href"))
+                            lstPlayList.Items.Add(i.ToString() + ". " + text[6].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + " - " + text[14].Replace("&", "").Replace("#", "").Replace("$", "") 
+                                                               + Environment.NewLine);
                         else
-                            lstPlayList.Items.Add(i.ToString() + ". " + text[2].Replace("&", "").Replace("#", "").Replace("$", "") + Environment.NewLine);
+                            lstPlayList.Items.Add(i.ToString() + ". " + text[6].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + " - " + text[12].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + Environment.NewLine);
+                         * */
+                        int indexTitle = 0;
+                        int indexTrack = 0;
+                        if (txtUrl.Text == "")
+                        {
+                            indexTitle = 6;
+                            if (text[13].Contains("a href"))
+                            {
+                                indexTrack = 14;
+                            }
+                            else
+                            {
+                                indexTrack = 12;
+                            }
+                            lstPlayList.Items.Add(i.ToString() + ". " + text[indexTitle].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + " - " + text[indexTrack].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + Environment.NewLine);
+                        }
+                        else
+                        {
+                            indexTitle = 8;
+                            if (text[indexTitle].ToLower() != txtUrl.Text.ToLower())
+                            {
+                                indexTitle = 6;
+                                indexTrack = 14;
+                                lstPlayList.Items.Add(i.ToString() + ". " + text[indexTitle].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + " - " + text[indexTrack].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + text[16].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + text[18].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                               + Environment.NewLine);
+                            }
+                            else
+                            {
+                                if (text[17].Contains("a href"))
+                                {
+                                    indexTrack = 18;
+                                }
+                                else
+                                {
+                                    indexTrack = 12;
+                                }
+                                lstPlayList.Items.Add(i.ToString() + ". " + text[indexTitle].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                                   + " - " + text[indexTrack].Replace("&", "").Replace("#", "").Replace("$", "")
+                                                                   + Environment.NewLine);
+                            }
+                        }
+
                     }
                     
                 }               
@@ -128,7 +186,8 @@ namespace VKPlayer
                     return;
                 isOpen = true;
                 musicState = MusicState.Played;
-                lstPlayList.SelectedIndex = nextAudio;
+                string notify = lstPlayList.Items[nextAudio].ToString();
+                notifyIcon1.Text = notify.Substring(0, (notify.Length > 63) ? 63 : notify.Length);
             }
             else
                 if (musicState == MusicState.Paused)
@@ -200,6 +259,8 @@ namespace VKPlayer
                 return;
 
             lstPlayList.SelectedIndex = nextAudio;
+            string notify = lstPlayList.Items[nextAudio].ToString();
+            notifyIcon1.Text = notify.Substring(0, (notify.Length > 63) ? 63 : notify.Length);
 
             isOpen = true;            
         }
@@ -226,7 +287,8 @@ namespace VKPlayer
                 return;
             }
 
-            string path = audios[index].Remove(0, 7).Replace("/", "");
+            //string path = audios[index].Remove(0, 7).Replace("/", "");
+            string path = lstPlayList.Items[index].ToString().Remove(0, 3).Trim(new Char[] { '\r', '\n' });
             SaveFileDialog sf = new SaveFileDialog();
             sf.RestoreDirectory = true;
             sf.Filter = "Music files (*.mp3)|*.mp3";
@@ -237,6 +299,87 @@ namespace VKPlayer
             DownloadManager dm = new DownloadManager();
             dm.Show();          
             dm.Download(audios[index], sf.FileName);
+        }
+
+        private void MainWindow_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == WindowState)
+            {
+                notifyIcon1.Visible = true;
+                this.ShowInTaskbar = false;
+            }
+        }
+
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                notifyIcon1.Visible = false;
+                this.ShowInTaskbar = true;
+                this.WindowState = FormWindowState.Normal;
+                this.TopMost = true;                      
+            } 
+        }
+
+        private void lblExit_MouseEnter(object sender, EventArgs e)
+        {
+            lblExit.ForeColor = SystemColors.ControlLight;
+        }
+
+        private void lblExit_MouseLeave(object sender, EventArgs e)
+        {
+            lblExit.ForeColor = SystemColors.ControlText;
+        }
+
+        private void lblExit_MouseDown(object sender, MouseEventArgs e)
+        {
+            lblExit.ForeColor = SystemColors.HotTrack;
+        }
+
+        private void lblExit_Click(object sender, EventArgs e)
+        {
+            base.Close();
+        }
+
+        private void lblMinimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void lblMinimize_MouseEnter(object sender, EventArgs e)
+        {
+            lblMinimize.ForeColor = SystemColors.ControlLight;
+        }
+
+        private void lblMinimize_MouseDown(object sender, MouseEventArgs e)
+        {
+            lblMinimize.ForeColor = SystemColors.HotTrack;
+        }
+
+        private void lblMinimize_MouseLeave(object sender, EventArgs e)
+        {
+            lblMinimize.ForeColor = SystemColors.ControlText;
+        }
+
+        private void MainWindow_MouseDown(object sender, MouseEventArgs e)
+        {
+            downPoint = e.Location;
+            isDragMode = true;
+        }
+
+        private void MainWindow_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragMode)
+            {
+                Point p = e.Location;
+                Point dp = new Point(p.X - downPoint.X, p.Y - downPoint.Y);
+                Location = new Point(Location.X + dp.X, Location.Y + dp.Y);
+            }
+        }
+
+        private void MainWindow_MouseUp(object sender, MouseEventArgs e)
+        {
+            isDragMode = false;
         }
     }
 }
