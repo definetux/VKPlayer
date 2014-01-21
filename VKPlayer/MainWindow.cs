@@ -41,6 +41,8 @@ namespace VKPlayer
 
         private string userId;
 
+        private int lastVolume;
+
         public MainWindow()
         {
             audios = new List<string>();
@@ -62,7 +64,9 @@ namespace VKPlayer
 
             musicState = MusicState.Stoped;
 
-            InitializeComponent();  
+            InitializeComponent();
+
+            tbVolume.Value = MP3Player.GetVolume();
         }
 
         public void Authorization()
@@ -100,12 +104,14 @@ namespace VKPlayer
             {
                 if (userId == null)
                 {
-                    Regex reg = new Regex( "\"" + @"user_id" + "\"" + @"\:[0-9]+",                                
+                    Regex reg = new Regex( "\"" + @"id" + "\"" + @"\:[0-9]+",                                
                                             RegexOptions.IgnoreCase);
                     MatchCollection mc = reg.Matches(webBrowser.DocumentText);
                     string uri = "";
                     foreach (Match mat in mc)
-                     uri = mat.ToString();
+                    {
+                        uri = mat.ToString();
+                    }
                     userId = uri.Remove(0, uri.LastIndexOf(':') + 1);
                 }
 
@@ -146,10 +152,13 @@ namespace VKPlayer
                                     || currentPart.Contains("ndash")))
                                     track += currentPart + ' ';
                             }
-                            lstPlayList.Items.Add(i.ToString() + ". " + track.Replace("/a", "").Replace("/b", " - ").Replace("  ", " ").Replace(" b ", " "));
+                            lstPlayList.Items.Add(i.ToString() + ". " + track.Replace(" /a ", " ").Replace(" /b ", " - ").Replace("  ", " ").Replace(" b ", " ").TrimEnd(' '));
                         }
 
                     }
+                    if (lstPlayList.Items.Count != audios.Count)
+                        audios.RemoveAt(audios.Count - 1);
+                    lstPlayList.SelectedIndex = 0;
                 }
 
                 else
@@ -292,7 +301,7 @@ namespace VKPlayer
             if (FormWindowState.Minimized == WindowState)
             {
                 notifyIcon1.Visible = true;
-                this.ShowInTaskbar = false;
+                //this.ShowInTaskbar = false;
             }
         }
 
@@ -372,6 +381,88 @@ namespace VKPlayer
         private void button1_Click(object sender, EventArgs e)
         {
             webBrowser.Navigate("http://vk.com/audios" + userId);
+        }
+
+        private void btnMix_Click(object sender, EventArgs e)
+        {
+            if (audios.Count == 0)
+                return;
+
+            uint []bitmap = new uint[audios.Count / sizeof(uint) + 1];
+            for (int i = 0; i < bitmap.Length; i++)
+                bitmap[i] = 0;
+
+            int[] sequence = new int[audios.Count];
+            for (int i = 0; i < sequence.Length; i++)
+                sequence[i] = -1;
+
+            Random rand = new Random();
+
+            bool isSequenceFull = false;
+
+            int sequenceIndex = 0;
+
+            while (isSequenceFull == false)
+            {
+                int newElement = rand.Next(0, audios.Count);
+                if ((bitmap[(newElement / sizeof(uint))] >> (newElement % sizeof(uint)) & 1) == 0)
+                {
+                    sequence[sequenceIndex] = newElement;
+                    sequenceIndex++;
+                    bitmap[(newElement / sizeof(uint))] |= (uint)(1 << (newElement % sizeof(uint)));
+                }
+                isSequenceFull = true;
+                for (int i = 0; i < audios.Count; i++)
+                {
+                    if (((bitmap[(i / sizeof(uint))] >> (i % sizeof(uint))) & 1) == 0)
+                    {	
+                        isSequenceFull = false;
+                        break;
+                    }
+                }
+            }
+
+            //int a = sequence[5];
+            List<string> newPlayList = new List<string>();
+            ListBox newTrackList = new ListBox();
+            for (int i = 0; i < sequence.Length; i++)
+            {
+                newPlayList.Add(audios[sequence[i]]);
+                newTrackList.Items.Add(lstPlayList.Items[sequence[i]]);
+            }
+
+            audios = newPlayList;
+            lstPlayList.Items.Clear();
+
+            int id = 0;
+            foreach (string track in newTrackList.Items)
+            {
+                id++;
+                lstPlayList.Items.Add(id.ToString() + track.Remove(0, track.IndexOf('.')));
+            }
+            lstPlayList.SelectedIndex = 0;
+        }
+
+        private void lstPlayList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int i = ((ListBox)sender).SelectedIndex;
+        }
+
+        private void tbVolume_Scroll(object sender, EventArgs e)
+        {
+            MP3Player.SetVolume(tbVolume.Value);
+        }
+
+        private void btnMute_Click(object sender, EventArgs e)
+        {
+            if (tbVolume.Value == 0)
+                tbVolume.Value = lastVolume;
+            else
+            {
+                lastVolume = tbVolume.Value;
+                tbVolume.Value = 0;
+            }
+            MP3Player.SetVolume(tbVolume.Value);
         }
     }
 }

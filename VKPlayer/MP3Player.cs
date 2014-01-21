@@ -15,6 +15,11 @@ namespace VKPlayer
         private static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hWndCallback);
         [DllImport("winmm.dll")]
         private static extern Int32 mciGetErrorString(Int32 errorCode, StringBuilder errorText, Int32 errorTextSize);
+        [DllImport("winmm.dll")]
+        private static extern int waveOutGetVolume(IntPtr hwo, out uint dwVolume);
+
+        [DllImport("winmm.dll")]
+        private static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume);
 
         public static bool OpenPlayer(string sFileName)
         {
@@ -29,6 +34,26 @@ namespace VKPlayer
             }
             else
                 return true;
+        }
+
+        public static int GetVolume()
+        {
+            uint CurrVol = 0;
+            // At this point, CurrVol gets assigned the volume
+            waveOutGetVolume(IntPtr.Zero, out CurrVol);
+            // Calculate the volume
+            ushort CalcVol = (ushort)(CurrVol & 0x0000ffff);
+            // Get the volume on a scale of 1 to 100 (to fit the trackbar)
+            return CalcVol / (ushort.MaxValue / 100);
+        }
+
+        public static void SetVolume(int value)
+        {
+            int NewVolume = ((ushort.MaxValue / 100) * value);
+            // Set the same volume for both the left and the right channels
+            uint NewVolumeAllChannels = (((uint)NewVolume & 0x0000ffff) | ((uint)NewVolume << 16));
+            // Set the volume
+            waveOutSetVolume(IntPtr.Zero, NewVolumeAllChannels);
         }
 
         public static bool Play(IntPtr handle)
