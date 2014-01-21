@@ -26,10 +26,7 @@ namespace VKPlayer
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            login = txtLogin.Text;
-            password = txtPassword.Text;
-            result = DialogResult.OK;
-            this.Close();
+            TryAccess();
         }
 
         public  DialogResult ShowDialog()
@@ -54,6 +51,14 @@ namespace VKPlayer
             }
         }
 
+        private void TryAccess()
+        {
+            login = txtLogin.Text;
+            password = txtPassword.Text;
+            result = DialogResult.OK;
+            this.Close();
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             result = DialogResult.Cancel;
@@ -63,6 +68,12 @@ namespace VKPlayer
         protected override void OnClosed(EventArgs e)
         {          
             base.OnClosed(e);
+        }
+
+        private void txtPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                TryAccess();
         }
     }
 }

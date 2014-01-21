@@ -43,6 +43,7 @@
             this.lblExit = new System.Windows.Forms.Label();
             this.lblMinimize = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnAudios = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtUrl
@@ -53,17 +54,17 @@
             this.txtUrl.Location = new System.Drawing.Point(24, 135);
             this.txtUrl.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(360, 46);
+            this.txtUrl.Size = new System.Drawing.Size(279, 46);
             this.txtUrl.TabIndex = 1;
             this.txtUrl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtUrl_KeyDown);
             // 
             // btnSearch
             // 
-            this.btnSearch.Font = new System.Drawing.Font("Segoe UI Light", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSearch.Location = new System.Drawing.Point(405, 71);
+            this.btnSearch.Font = new System.Drawing.Font("Segoe UI Light", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnSearch.Location = new System.Drawing.Point(304, 135);
             this.btnSearch.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(149, 110);
+            this.btnSearch.Size = new System.Drawing.Size(80, 46);
             this.btnSearch.TabIndex = 2;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -200,12 +201,24 @@
             this.label2.TabIndex = 18;
             this.label2.Text = "VKPlayer";
             // 
+            // btnAudios
+            // 
+            this.btnAudios.Font = new System.Drawing.Font("Segoe UI Light", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAudios.Location = new System.Drawing.Point(405, 71);
+            this.btnAudios.Name = "btnAudios";
+            this.btnAudios.Size = new System.Drawing.Size(149, 110);
+            this.btnAudios.TabIndex = 19;
+            this.btnAudios.Text = "My Audios";
+            this.btnAudios.UseVisualStyleBackColor = true;
+            this.btnAudios.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(755, 440);
+            this.Controls.Add(this.btnAudios);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lblMinimize);
             this.Controls.Add(this.lblExit);
@@ -251,6 +264,7 @@
         private System.Windows.Forms.Label lblExit;
         private System.Windows.Forms.Label lblMinimize;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnAudios;
     }
 }
 

@@ -43,6 +43,8 @@ namespace VKPlayer
             // Let the user know we are connecting to the server
             this.url = url;
             this.path = path;
+            path = path.Substring(path.LastIndexOf('\\') + 1);
+
             txtFile.Text = path;
             // Create a new thread that calls the Download() method
             thrDownload = new Thread(Download);

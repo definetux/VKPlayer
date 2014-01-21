@@ -29,6 +29,8 @@ namespace VKPlayer
 
         private int isAuthorization;
 
+        private int isLogin;
+
         private System.Windows.Forms.WebBrowser webBrowser;
 
         private MusicState musicState;
@@ -37,22 +39,30 @@ namespace VKPlayer
 
         private bool isDragMode = false;
 
+        private string userId;
+
         public MainWindow()
         {
             audios = new List<string>();
             isAuthorization = 0;
+            isLogin = 0;
+
+            this.TopMost = false;
+
             webBrowser = new System.Windows.Forms.WebBrowser();
             webBrowser.ScriptErrorsSuppressed = true;
 
             webBrowser.Navigated += webBrowser_Navigated;
 
-            Authorization();
+            //this.Controls.Add(webBrowser);
+
+            webBrowser.Navigate("https://login.vk.com/?act=login&email=&pass=&expire=&vk=");
 
             isOpen = false;
 
             musicState = MusicState.Stoped;
 
-            InitializeComponent();
+            InitializeComponent();  
         }
 
         public void Authorization()
@@ -73,102 +83,78 @@ namespace VKPlayer
         {
             if (webBrowser.Url.AbsoluteUri.Contains("login.php"))
             {
-                MessageBox.Show("Invalid username or password","Error!",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                Authorization();
-            }
 
-            if (isAuthorization == 2)
-            {
-                audios.Clear();
-                nextAudio = 0;
-                lstPlayList.Items.Clear();
-
-                Encoding enc = Encoding.GetEncoding("windows-1251");
-                string HTMLText;
-
-                Stream stream = webBrowser.DocumentStream;
-                StreamReader sr = new StreamReader(stream, enc);
-                HTMLText = sr.ReadToEnd();
-                stream.Close();
- 
-                Regex reg = new Regex(@"(cs.+\.mp3)|" + 
-                                         //@"(\<span\sclass=" + "\"" + "title" + "\"" + ".+" + @"\<span\sclass=" + "\"" + "user" + "\")",
-                                        @"(\<div\sclass=" + "\"" + @"title_wrap\sfl_l" + "\"" + ".+" +@"\<\/div\>)",
-                                        RegexOptions.IgnoreCase);
-                //<div class="title_wrap fl_l"
-                MatchCollection mc = reg.Matches(HTMLText);
-
-                int i = 0;
-                foreach (Match mat in mc)
+                if (isLogin == 1)
                 {
-                    if (mat.ToString().Contains("vk.me"))
-                        audios.Add("http:\\\\" + mat.ToString());
-                    else
+                    this.TopMost = false;
+                    Authorization();
+                }
+                else if (isLogin > 1)
+                {
+                    MessageBox.Show("Error!", "Invalid login or password!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    isLogin = 0;
+                }
+                isLogin++;
+            }
+            else
+            {
+                if (userId == null)
+                {
+                    Regex reg = new Regex( "\"" + @"user_id" + "\"" + @"\:[0-9]+",                                
+                                            RegexOptions.IgnoreCase);
+                    MatchCollection mc = reg.Matches(webBrowser.DocumentText);
+                    string uri = "";
+                    foreach (Match mat in mc)
+                     uri = mat.ToString();
+                    userId = uri.Remove(0, uri.LastIndexOf(':') + 1);
+                }
+
+                if (isAuthorization == 2)
+                {
+                    audios.Clear();
+                    nextAudio = 0;
+                    lstPlayList.Items.Clear();
+
+                    Encoding enc = Encoding.GetEncoding("windows-1251");
+                    string HTMLText;
+
+                    Stream stream = webBrowser.DocumentStream;
+                    StreamReader sr = new StreamReader(stream, enc);
+                    HTMLText = sr.ReadToEnd();
+                    stream.Close();
+
+                    Regex reg = new Regex(@"(cs.+\.mp3)|" +
+                                            @"(\<div\sclass=" + "\"" + @"title_wrap\sfl_l" + "\"" + ".+" + @"\<\/div\>)",
+                                            RegexOptions.IgnoreCase);
+                    MatchCollection mc = reg.Matches(HTMLText);
+
+                    int i = 0;
+                    foreach (Match mat in mc)
                     {
-                        i++;
-                        string[] text = mat.ToString().Split(new Char[] {'<','>'});
-                        /*
-                        if (text[13].Contains("a href"))
-                            lstPlayList.Items.Add(i.ToString() + ". " + text[6].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + " - " + text[14].Replace("&", "").Replace("#", "").Replace("$", "") 
-                                                               + Environment.NewLine);
-                        else
-                            lstPlayList.Items.Add(i.ToString() + ". " + text[6].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + " - " + text[12].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + Environment.NewLine);
-                         * */
-                        int indexTitle = 0;
-                        int indexTrack = 0;
-                        if (txtUrl.Text == "")
-                        {
-                            indexTitle = 6;
-                            if (text[13].Contains("a href"))
-                            {
-                                indexTrack = 14;
-                            }
-                            else
-                            {
-                                indexTrack = 12;
-                            }
-                            lstPlayList.Items.Add(i.ToString() + ". " + text[indexTitle].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + " - " + text[indexTrack].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + Environment.NewLine);
-                        }
+                        if (mat.ToString().Contains("vk.me"))
+                            audios.Add("http:\\\\" + mat.ToString());
                         else
                         {
-                            indexTitle = 8;
-                            if (text[indexTitle].ToLower() != txtUrl.Text.ToLower())
+                            i++;
+                            string[] text = mat.ToString().Replace("&", "").Replace("#", "").Replace("$", "").Split(new Char[] { '<', '>' });
+                            string track = "";
+                            foreach (string currentPart in text)
                             {
-                                indexTitle = 6;
-                                indexTrack = 14;
-                                lstPlayList.Items.Add(i.ToString() + ". " + text[indexTitle].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + " - " + text[indexTrack].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + text[16].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + text[18].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                               + Environment.NewLine);
+                                if (!(currentPart.Contains("div") 
+                                    || currentPart.Contains("span") 
+                                    || currentPart.Contains("onclick") 
+                                    || currentPart.Contains("ndash")))
+                                    track += currentPart + ' ';
                             }
-                            else
-                            {
-                                if (text[17].Contains("a href"))
-                                {
-                                    indexTrack = 18;
-                                }
-                                else
-                                {
-                                    indexTrack = 12;
-                                }
-                                lstPlayList.Items.Add(i.ToString() + ". " + text[indexTitle].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                                   + " - " + text[indexTrack].Replace("&", "").Replace("#", "").Replace("$", "")
-                                                                   + Environment.NewLine);
-                            }
+                            lstPlayList.Items.Add(i.ToString() + ". " + track.Replace("/a", "").Replace("/b", " - ").Replace("  ", " ").Replace(" b ", " "));
                         }
 
                     }
-                    
-                }               
+                }
+
+                else
+                    isAuthorization++;
             }
-            else
-                isAuthorization++;
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -338,6 +324,7 @@ namespace VKPlayer
 
         private void lblExit_Click(object sender, EventArgs e)
         {
+            MP3Player.ClosePlayer();
             base.Close();
         }
 
@@ -380,6 +367,11 @@ namespace VKPlayer
         private void MainWindow_MouseUp(object sender, MouseEventArgs e)
         {
             isDragMode = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            webBrowser.Navigate("http://vk.com/audios" + userId);
         }
     }
 }
