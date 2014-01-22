@@ -261,6 +261,9 @@ namespace VKPlayer
 
         private void PlayNext(int index = -1)
         {
+            if (audios.Count == 0)
+                return;
+
             musicState = MusicState.Played;
             if (isOpen == true)
                 if (MP3Player.ClosePlayer() == false)
