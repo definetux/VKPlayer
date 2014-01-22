@@ -36,7 +36,12 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.lstPlayList = new System.Windows.Forms.ListBox();
-            this.btnDownload = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsAdd = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsClear = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsDonwload = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.lblExit = new System.Windows.Forms.Label();
@@ -46,6 +51,11 @@
             this.btnMix = new System.Windows.Forms.Button();
             this.tbVolume = new System.Windows.Forms.TrackBar();
             this.btnMute = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnMyPlayList = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.lblId = new System.Windows.Forms.Label();
+            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbVolume)).BeginInit();
             this.SuspendLayout();
             // 
@@ -120,6 +130,7 @@
             // lstPlayList
             // 
             this.lstPlayList.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lstPlayList.ContextMenuStrip = this.contextMenuStrip1;
             this.lstPlayList.Font = new System.Drawing.Font("Segoe UI Light", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lstPlayList.ForeColor = System.Drawing.SystemColors.InfoText;
             this.lstPlayList.FormattingEnabled = true;
@@ -131,20 +142,61 @@
             this.lstPlayList.TabIndex = 13;
             this.lstPlayList.SelectedIndexChanged += new System.EventHandler(this.lstPlayList_SelectedIndexChanged);
             this.lstPlayList.DoubleClick += new System.EventHandler(this.lstPlayList_DoubleClick);
+            this.lstPlayList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstPlayList_KeyDown);
+            this.lstPlayList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lstPlayList_MouseDown);
             // 
-            // btnDownload
+            // contextMenuStrip1
             // 
-            this.btnDownload.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.btnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDownload.Font = new System.Drawing.Font("Segoe UI Light", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnDownload.Location = new System.Drawing.Point(640, 70);
-            this.btnDownload.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
-            this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(149, 110);
-            this.btnDownload.TabIndex = 14;
-            this.btnDownload.Text = "Download";
-            this.btnDownload.UseVisualStyleBackColor = false;
-            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsAdd,
+            this.tsDelete,
+            this.tsClear,
+            this.toolStripSeparator1,
+            this.tsDonwload});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 106);
+            // 
+            // tsAdd
+            // 
+            this.tsAdd.Font = new System.Drawing.Font("Segoe UI Light", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tsAdd.Name = "tsAdd";
+            this.tsAdd.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.tsAdd.Size = new System.Drawing.Size(209, 24);
+            this.tsAdd.Text = "Add to playlist";
+            this.tsAdd.Click += new System.EventHandler(this.tsAdd_Click);
+            // 
+            // tsDelete
+            // 
+            this.tsDelete.Font = new System.Drawing.Font("Segoe UI Light", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tsDelete.Name = "tsDelete";
+            this.tsDelete.Size = new System.Drawing.Size(209, 24);
+            this.tsDelete.Text = "Delete track";
+            this.tsDelete.Visible = false;
+            this.tsDelete.Click += new System.EventHandler(this.tsDelete_Click);
+            // 
+            // tsClear
+            // 
+            this.tsClear.Font = new System.Drawing.Font("Segoe UI Light", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tsClear.Name = "tsClear";
+            this.tsClear.Size = new System.Drawing.Size(209, 24);
+            this.tsClear.Text = "Clear all";
+            this.tsClear.Visible = false;
+            this.tsClear.Click += new System.EventHandler(this.tsClear_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(206, 6);
+            // 
+            // tsDonwload
+            // 
+            this.tsDonwload.Font = new System.Drawing.Font("Segoe UI Light", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tsDonwload.Name = "tsDonwload";
+            this.tsDonwload.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+            this.tsDonwload.Size = new System.Drawing.Size(209, 24);
+            this.tsDonwload.Text = "Download";
+            this.tsDonwload.Click += new System.EventHandler(this.tsDonwload_Click);
             // 
             // label1
             // 
@@ -161,6 +213,7 @@
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "VKPlayer";
+            this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
             // 
             // lblExit
@@ -254,12 +307,50 @@
             this.btnMute.UseVisualStyleBackColor = false;
             this.btnMute.Click += new System.EventHandler(this.btnMute_Click);
             // 
+            // btnMyPlayList
+            // 
+            this.btnMyPlayList.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.btnMyPlayList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMyPlayList.Font = new System.Drawing.Font("Segoe UI Light", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMyPlayList.Location = new System.Drawing.Point(640, 71);
+            this.btnMyPlayList.Name = "btnMyPlayList";
+            this.btnMyPlayList.Size = new System.Drawing.Size(149, 109);
+            this.btnMyPlayList.TabIndex = 23;
+            this.btnMyPlayList.Text = "My Playlist";
+            this.btnMyPlayList.UseVisualStyleBackColor = false;
+            this.btnMyPlayList.Click += new System.EventHandler(this.btnMyPlayList_Click);
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogout.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnLogout.Image = ((System.Drawing.Image)(resources.GetObject("btnLogout.Image")));
+            this.btnLogout.Location = new System.Drawing.Point(0, -1);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(55, 47);
+            this.btnLogout.TabIndex = 24;
+            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // lblId
+            // 
+            this.lblId.AutoSize = true;
+            this.lblId.Font = new System.Drawing.Font("Segoe UI Light", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblId.Location = new System.Drawing.Point(61, 9);
+            this.lblId.Name = "lblId";
+            this.lblId.Size = new System.Drawing.Size(38, 25);
+            this.lblId.TabIndex = 25;
+            this.lblId.Text = "ID: ";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(809, 440);
+            this.Controls.Add(this.lblId);
+            this.Controls.Add(this.btnLogout);
+            this.Controls.Add(this.btnMyPlayList);
             this.Controls.Add(this.btnMute);
             this.Controls.Add(this.tbVolume);
             this.Controls.Add(this.btnMix);
@@ -268,7 +359,6 @@
             this.Controls.Add(this.lblMinimize);
             this.Controls.Add(this.lblExit);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.lstPlayList);
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnStop);
@@ -287,7 +377,7 @@
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainWindow_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainWindow_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainWindow_MouseUp);
-            this.Resize += new System.EventHandler(this.MainWindow_Resize);
+            this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tbVolume)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -302,7 +392,6 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.ListBox lstPlayList;
-        private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Label lblExit;
@@ -312,6 +401,16 @@
         private System.Windows.Forms.Button btnMix;
         private System.Windows.Forms.TrackBar tbVolume;
         private System.Windows.Forms.Button btnMute;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem tsAdd;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem tsDonwload;
+        private System.Windows.Forms.Button btnMyPlayList;
+        private System.Windows.Forms.ToolStripMenuItem tsDelete;
+        private System.Windows.Forms.ToolStripMenuItem tsClear;
+        private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.Label lblId;
     }
 }
 

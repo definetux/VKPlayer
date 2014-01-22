@@ -75,5 +75,11 @@ namespace VKPlayer
             if (e.KeyCode == Keys.Enter)
                 TryAccess();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            result = DialogResult.Ignore;
+            this.Close();
+        }
     }
 }

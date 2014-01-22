@@ -21,6 +21,10 @@ namespace VKPlayer
             Played, Paused, Stoped
         }
 
+        private const int SIZE_OF_BYTE = 8;
+
+        private const string pathPlaylist = "playlist.pl";
+
         private int nextAudio = 0;
 
         private List<string> audios;
@@ -39,7 +43,7 @@ namespace VKPlayer
 
         private bool isDragMode = false;
 
-        private string userId;
+        private string userId = "none";
 
         private int lastVolume;
 
@@ -79,13 +83,22 @@ namespace VKPlayer
             {
                 Environment.Exit(-1);
             }
-
-            webBrowser.Navigate("https://login.vk.com/?act=login&email=" + auth.Login + "&pass=" + auth.Password + "&expire=&vk=");
+            else if (res == DialogResult.OK)
+            {
+                webBrowser.Navigate("https://login.vk.com/?act=login&email=" + auth.Login + "&pass=" + auth.Password + "&expire=&vk=");
+            }
+            else
+            {
+                lblId.Text = "ID: " + userId;
+                btnAudios.Enabled = false;
+                txtUrl.Enabled = false;
+            }
+            
         }
 
         void webBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            if (webBrowser.Url.AbsoluteUri.Contains("login.php"))
+            if (webBrowser.Url.AbsoluteUri.Contains("login"))
             {
 
                 if (isLogin == 1)
@@ -95,39 +108,51 @@ namespace VKPlayer
                 }
                 else if (isLogin > 1)
                 {
-                    MessageBox.Show("Error!", "Invalid login or password!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid login or password!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     isLogin = 0;
                 }
                 isLogin++;
             }
             else
             {
-                if (userId == null)
+                Encoding enc = Encoding.GetEncoding("windows-1251");
+                string HTMLText;
+
+                Stream stream = webBrowser.DocumentStream;
+                StreamReader sr = new StreamReader(stream, enc);
+                HTMLText = sr.ReadToEnd();
+                stream.Close();
+
+                if (userId == "none")
                 {
-                    Regex reg = new Regex( "\"" + @"id" + "\"" + @"\:[0-9]+",                                
+
+                    Regex reg = new Regex( "id=" + "\"" + @"head_music" + "\""
+                                            + @"\shref=" + "\"" + @"\/audios[0-9]+" + @"\?",                                 
                                             RegexOptions.IgnoreCase);
-                    MatchCollection mc = reg.Matches(webBrowser.DocumentText);
+
+                    MatchCollection mc = reg.Matches(HTMLText);
+
                     string uri = "";
                     foreach (Match mat in mc)
                     {
                         uri = mat.ToString();
                     }
-                    userId = uri.Remove(0, uri.LastIndexOf(':') + 1);
+                    if (uri != "")
+                        userId = uri.Split('"')[3].Remove(0, 7).TrimEnd('?');
+                    lblId.Text = "ID: " + userId;
+                    btnAudios.Enabled = true;
+                    txtUrl.Enabled = true;
                 }
-
+               
                 if (isAuthorization == 2)
                 {
+                    tsDelete.Visible = false;
+                    tsClear.Visible = false;
+                    tsAdd.Visible = true;  
+
                     audios.Clear();
                     nextAudio = 0;
                     lstPlayList.Items.Clear();
-
-                    Encoding enc = Encoding.GetEncoding("windows-1251");
-                    string HTMLText;
-
-                    Stream stream = webBrowser.DocumentStream;
-                    StreamReader sr = new StreamReader(stream, enc);
-                    HTMLText = sr.ReadToEnd();
-                    stream.Close();
 
                     Regex reg = new Regex(@"(cs.+\.mp3)|" +
                                             @"(\<div\sclass=" + "\"" + @"title_wrap\sfl_l" + "\"" + ".+" + @"\<\/div\>)",
@@ -158,7 +183,8 @@ namespace VKPlayer
                     }
                     if (lstPlayList.Items.Count != audios.Count)
                         audios.RemoveAt(audios.Count - 1);
-                    lstPlayList.SelectedIndex = 0;
+                    if (lstPlayList.Items.Count != 0)
+                        lstPlayList.SelectedIndex = 0;
                 }
 
                 else
@@ -181,7 +207,7 @@ namespace VKPlayer
                     return;
                 isOpen = true;
                 musicState = MusicState.Played;
-                string notify = lstPlayList.Items[nextAudio].ToString();
+                string notify = lstPlayList.Items[nextAudio].ToString(); // CHANGE LSTPLAYLIST
                 notifyIcon1.Text = notify.Substring(0, (notify.Length > 63) ? 63 : notify.Length);
             }
             else
@@ -253,7 +279,7 @@ namespace VKPlayer
             if (MP3Player.Play(this.Handle) == false)
                 return;
 
-            lstPlayList.SelectedIndex = nextAudio;
+            lstPlayList.SelectedIndex = nextAudio;                   
             string notify = lstPlayList.Items[nextAudio].ToString();
             notifyIcon1.Text = notify.Substring(0, (notify.Length > 63) ? 63 : notify.Length);
 
@@ -271,48 +297,14 @@ namespace VKPlayer
         private void lstPlayList_DoubleClick(object sender, EventArgs e)
         {
             PlayNext(lstPlayList.SelectedIndex);
-        }
-
-        private void btnDownload_Click(object sender, EventArgs e)
-        {
-            int index = lstPlayList.SelectedIndex;
-            if (index == -1)
-            {
-                MessageBox.Show("Choose a track");
-                return;
-            }
-
-            //string path = audios[index].Remove(0, 7).Replace("/", "");
-            string path = lstPlayList.Items[index].ToString().Remove(0, 3).Trim(new Char[] { '\r', '\n' });
-            SaveFileDialog sf = new SaveFileDialog();
-            sf.RestoreDirectory = true;
-            sf.Filter = "Music files (*.mp3)|*.mp3";
-            sf.FileName = path;
-            if (sf.ShowDialog() == DialogResult.Cancel)
-                return;
-    
-            DownloadManager dm = new DownloadManager();
-            dm.Show();          
-            dm.Download(audios[index], sf.FileName);
-        }
-
-        private void MainWindow_Resize(object sender, EventArgs e)
-        {
-            if (FormWindowState.Minimized == WindowState)
-            {
-                notifyIcon1.Visible = true;
-                //this.ShowInTaskbar = false;
-            }
+           
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
-                notifyIcon1.Visible = false;
-                this.ShowInTaskbar = true;
-                this.WindowState = FormWindowState.Normal;
-                this.TopMost = true;                      
+                this.WindowState = FormWindowState.Normal;                    
             } 
         }
 
@@ -380,7 +372,8 @@ namespace VKPlayer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            webBrowser.Navigate("http://vk.com/audios" + userId);
+            if (userId != "") 
+                webBrowser.Navigate("http://vk.com/audios" + userId);
         }
 
         private void btnMix_Click(object sender, EventArgs e)
@@ -388,7 +381,7 @@ namespace VKPlayer
             if (audios.Count == 0)
                 return;
 
-            uint []bitmap = new uint[audios.Count / sizeof(uint) + 1];
+            uint []bitmap = new uint[audios.Count / (sizeof(uint) * SIZE_OF_BYTE) + 1];
             for (int i = 0; i < bitmap.Length; i++)
                 bitmap[i] = 0;
 
@@ -405,16 +398,16 @@ namespace VKPlayer
             while (isSequenceFull == false)
             {
                 int newElement = rand.Next(0, audios.Count);
-                if ((bitmap[(newElement / sizeof(uint))] >> (newElement % sizeof(uint)) & 1) == 0)
+                if ((bitmap[(newElement / (sizeof(uint) * SIZE_OF_BYTE))] >> (newElement % (sizeof(uint) * SIZE_OF_BYTE)) & 1) == 0)
                 {
                     sequence[sequenceIndex] = newElement;
                     sequenceIndex++;
-                    bitmap[(newElement / sizeof(uint))] |= (uint)(1 << (newElement % sizeof(uint)));
+                    bitmap[(newElement / (sizeof(uint) * SIZE_OF_BYTE))] |= (uint)(1 << (newElement % (sizeof(uint) * SIZE_OF_BYTE)));
                 }
                 isSequenceFull = true;
                 for (int i = 0; i < audios.Count; i++)
                 {
-                    if (((bitmap[(i / sizeof(uint))] >> (i % sizeof(uint))) & 1) == 0)
+                    if (((bitmap[(i / (sizeof(uint) * SIZE_OF_BYTE))] >> (i % (sizeof(uint) * SIZE_OF_BYTE))) & 1) == 0)
                     {	
                         isSequenceFull = false;
                         break;
@@ -422,7 +415,6 @@ namespace VKPlayer
                 }
             }
 
-            //int a = sequence[5];
             List<string> newPlayList = new List<string>();
             ListBox newTrackList = new ListBox();
             for (int i = 0; i < sequence.Length; i++)
@@ -445,7 +437,10 @@ namespace VKPlayer
 
         private void lstPlayList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int i = ((ListBox)sender).SelectedIndex;
+            if (lstPlayList.SelectedItem != null)
+                toolTip1.SetToolTip(lstPlayList, lstPlayList.SelectedItem.ToString());
+            else
+                toolTip1.SetToolTip(lstPlayList, "");
         }
 
         private void tbVolume_Scroll(object sender, EventArgs e)
@@ -463,6 +458,165 @@ namespace VKPlayer
                 tbVolume.Value = 0;
             }
             MP3Player.SetVolume(tbVolume.Value);
+        }
+
+        private void tsDonwload_Click(object sender, EventArgs e)
+        {
+            int index = lstPlayList.SelectedIndex;
+            if (index == -1)
+            {
+                MessageBox.Show("Choose a track");
+                return;
+            }
+
+            string path = lstPlayList.Items[index].ToString().Remove(0, 3).Trim(new Char[] { '\r', '\n' }).TrimStart(' ');
+            SaveFileDialog sf = new SaveFileDialog();
+            sf.RestoreDirectory = true;
+            sf.Filter = "Music files (*.mp3)|*.mp3";
+            sf.FileName = path;
+            if (sf.ShowDialog() == DialogResult.Cancel)
+                return;
+
+            DownloadManager dm = new DownloadManager();
+            dm.Show();
+            dm.Download(audios[index], sf.FileName);
+        }
+
+        private void lstPlayList_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ((ListBox)sender).SelectedIndex = ((ListBox)sender).IndexFromPoint(e.Location);
+            }
+        }
+
+        private void tsAdd_Click(object sender, EventArgs e)
+        {
+            StreamWriter sw = File.AppendText(pathPlaylist);
+
+            sw.WriteLine(audios[lstPlayList.SelectedIndex] + '|' + lstPlayList.SelectedItem.ToString().Remove(0, 3).TrimStart(' '));
+            sw.Close();
+        }
+
+        private void btnMyPlayList_Click(object sender, EventArgs e)
+        {
+            tsDelete.Visible = true;
+            tsClear.Visible = true;
+            tsAdd.Visible = false;
+
+            audios.Clear();
+            lstPlayList.Items.Clear();
+            nextAudio = 0;
+
+            try
+            {
+                StreamReader sr = File.OpenText(pathPlaylist);
+                int lstIndex = 0;
+
+                string song = "";
+
+                while ((song = sr.ReadLine()) != null)
+                {
+
+                    string[] parts = song.Split('|');
+
+                    lstIndex++;
+                    audios.Add(parts[0]);
+                    lstPlayList.Items.Add(lstIndex.ToString() + ". " + parts[1]);
+                }
+
+                sr.Close();
+
+                if (lstPlayList.Items.Count != 0)
+                    lstPlayList.SelectedIndex = 0;
+            }
+            catch (IOException)
+            {
+
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+        }
+
+        private void lstPlayList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                PlayNext(lstPlayList.SelectedIndex);
+            }
+        }
+
+        private void tsClear_Click(object sender, EventArgs e)
+        {
+            audios.Clear();
+            lstPlayList.Items.Clear();
+
+            File.Delete(pathPlaylist);
+            File.Create(pathPlaylist);
+        }
+
+        private void tsDelete_Click(object sender, EventArgs e)
+        {
+            string[] lines = File.ReadAllLines(pathPlaylist);
+            
+            int index = lstPlayList.SelectedIndex;
+
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(new FileStream(pathPlaylist, FileMode.Create, FileAccess.Write, FileShare.None)))
+                {
+                    foreach (string line in lines)
+                    {
+                        if (!line.Contains(audios[index]))
+                        {
+                            sw.Write(line + "\r\n");
+                        }
+                    }
+                    sw.Close();
+                }
+
+                audios.RemoveAt(index);
+                lstPlayList.Items.RemoveAt(index);
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (isAuthorization != 0)
+            {
+                Regex reg = new Regex(@"id=" + "\"" + @"logout_link" + "\"" + @"\shref="
+                                        + "\"" + ".+" + @"vk\.com",
+                                                RegexOptions.IgnoreCase);
+
+                MatchCollection mc = reg.Matches(webBrowser.DocumentText);
+
+                string uri = "";
+                foreach (Match mat in mc)
+                {
+                    uri = mat.ToString().Split('"')[3];
+                }
+
+                isLogin = 1;
+                isAuthorization = 0;
+                audios.Clear();
+                lstPlayList.Items.Clear();
+
+                lblId.Text = "ID: ";
+
+                userId = "none";
+                webBrowser.Navigate(uri);
+            }
+            else
+            {
+                isLogin = 0;
+                webBrowser.Navigate("https://login.vk.com/?act=login&email=&pass=&expire=&vk=");
+            }
         }
     }
 }
