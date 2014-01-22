@@ -495,7 +495,12 @@ namespace VKPlayer
 
         private void tsAdd_Click(object sender, EventArgs e)
         {
-            StreamWriter sw = File.AppendText(pathPlaylist);
+            string saveFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\VKPlayer";
+
+            DirectoryInfo dir = new DirectoryInfo(saveFolder);
+            dir.Create();
+
+            StreamWriter sw = File.AppendText(saveFolder + '\\'+ pathPlaylist);
 
             sw.WriteLine(audios[lstPlayList.SelectedIndex] + '|' + lstPlayList.SelectedItem.ToString().Remove(0, 3).TrimStart(' '));
             sw.Close();
