@@ -69,6 +69,7 @@
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.Size = new System.Drawing.Size(293, 46);
             this.txtUrl.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.txtUrl, "Enter the artist");
             this.txtUrl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtUrl_KeyDown);
             // 
             // btnPlay
@@ -82,6 +83,7 @@
             this.btnPlay.Size = new System.Drawing.Size(149, 110);
             this.btnPlay.TabIndex = 9;
             this.btnPlay.Text = "Play";
+            this.toolTip1.SetToolTip(this.btnPlay, "Play or resume track");
             this.btnPlay.UseVisualStyleBackColor = false;
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
             // 
@@ -96,6 +98,7 @@
             this.btnNext.Size = new System.Drawing.Size(149, 110);
             this.btnNext.TabIndex = 10;
             this.btnNext.Text = "Next";
+            this.toolTip1.SetToolTip(this.btnNext, "Next track");
             this.btnNext.UseVisualStyleBackColor = false;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
@@ -110,6 +113,7 @@
             this.btnStop.Size = new System.Drawing.Size(149, 110);
             this.btnStop.TabIndex = 11;
             this.btnStop.Text = "Stop";
+            this.toolTip1.SetToolTip(this.btnStop, "Stop track");
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
@@ -124,6 +128,7 @@
             this.btnPause.Size = new System.Drawing.Size(149, 110);
             this.btnPause.TabIndex = 12;
             this.btnPause.Text = "Pause";
+            this.toolTip1.SetToolTip(this.btnPause, "Pause track");
             this.btnPause.UseVisualStyleBackColor = false;
             this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
@@ -266,6 +271,7 @@
             this.btnAudios.Size = new System.Drawing.Size(149, 110);
             this.btnAudios.TabIndex = 19;
             this.btnAudios.Text = "My Audios";
+            this.toolTip1.SetToolTip(this.btnAudios, "My audio in VK");
             this.btnAudios.UseVisualStyleBackColor = false;
             this.btnAudios.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -277,6 +283,7 @@
             this.btnMix.Name = "btnMix";
             this.btnMix.Size = new System.Drawing.Size(67, 46);
             this.btnMix.TabIndex = 20;
+            this.toolTip1.SetToolTip(this.btnMix, "Mix tracklist");
             this.btnMix.UseVisualStyleBackColor = true;
             this.btnMix.Click += new System.EventHandler(this.btnMix_Click);
             // 
@@ -291,6 +298,7 @@
             this.tbVolume.TabIndex = 21;
             this.tbVolume.TickFrequency = 25;
             this.tbVolume.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.toolTip1.SetToolTip(this.tbVolume, "Volume");
             this.tbVolume.Value = 50;
             this.tbVolume.Scroll += new System.EventHandler(this.tbVolume_Scroll);
             // 
@@ -304,19 +312,21 @@
             this.btnMute.Size = new System.Drawing.Size(59, 32);
             this.btnMute.TabIndex = 22;
             this.btnMute.Text = "Mute";
+            this.toolTip1.SetToolTip(this.btnMute, "Mute");
             this.btnMute.UseVisualStyleBackColor = false;
             this.btnMute.Click += new System.EventHandler(this.btnMute_Click);
             // 
             // btnMyPlayList
             // 
             this.btnMyPlayList.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.btnMyPlayList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMyPlayList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnMyPlayList.Font = new System.Drawing.Font("Segoe UI Light", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMyPlayList.Location = new System.Drawing.Point(640, 71);
             this.btnMyPlayList.Name = "btnMyPlayList";
             this.btnMyPlayList.Size = new System.Drawing.Size(149, 109);
             this.btnMyPlayList.TabIndex = 23;
             this.btnMyPlayList.Text = "My Playlist";
+            this.toolTip1.SetToolTip(this.btnMyPlayList, "My playlist on PC");
             this.btnMyPlayList.UseVisualStyleBackColor = false;
             this.btnMyPlayList.Click += new System.EventHandler(this.btnMyPlayList_Click);
             // 
@@ -329,6 +339,7 @@
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(55, 47);
             this.btnLogout.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.btnLogout, "Logout");
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.button1_Click_1);
             // 
@@ -341,6 +352,7 @@
             this.lblId.Size = new System.Drawing.Size(38, 25);
             this.lblId.TabIndex = 25;
             this.lblId.Text = "ID: ";
+            this.toolTip1.SetToolTip(this.lblId, "ID in VK");
             // 
             // MainWindow
             // 

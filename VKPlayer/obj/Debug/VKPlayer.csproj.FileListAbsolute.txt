@@ -20,3 +20,4 @@ C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.exe
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.pdb
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.Authorization.resources
 C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.DownloadManager.resources
+C:\Users\Max\Documents\GitHub\VKPlayer\VKPlayer\obj\Debug\VKPlayer.csprojResolveAssemblyReference.cache
