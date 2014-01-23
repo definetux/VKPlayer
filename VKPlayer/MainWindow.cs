@@ -518,7 +518,9 @@ namespace VKPlayer
 
             try
             {
-                StreamReader sr = File.OpenText(pathPlaylist);
+                string saveFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\VKPlayer";
+
+                StreamReader sr = File.OpenText(saveFolder + '\\' + pathPlaylist);
                 int lstIndex = 0;
 
                 string song = "";
